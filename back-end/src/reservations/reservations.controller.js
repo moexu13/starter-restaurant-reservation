@@ -1,12 +1,28 @@
 /**
  * List handler for reservation resources
  */
-async function list(req, res) {
+const service = require("./reservations.service");
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+
+const getReservationDate = (req, res, next) => {
+  let { reservationDate } = req.params;
+  if (!reservationDate) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    reservationDate = today;
+  }
+  // console.log("date", reservationDate);
+  res.locals.reservationDate = reservationDate;
+  return next();
+}
+
+const list = async (req, res) => {
+  const reservations = await service.list(res.locals.reservationDate);
   res.json({
-    data: [],
+    data: reservations,
   });
 }
 
 module.exports = {
-  list,
+  list: [getReservationDate, asyncErrorBoundary(list)],
 };
