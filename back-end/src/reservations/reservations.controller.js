@@ -5,15 +5,12 @@ const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 const getReservationDate = (req, res, next) => {
-  let { reservationDate } = req.params;
-  if (!reservationDate) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    reservationDate = today;
+  const { reservationDate } = req.params;
+  if (reservationDate) {
+    res.locals.reservationDate = reservationDate;
+    return next();
   }
-  // console.log("date", reservationDate);
-  res.locals.reservationDate = reservationDate;
-  return next();
+  return next({ status: 404, message: "Reservation date required"});
 }
 
 const list = async (req, res) => {
