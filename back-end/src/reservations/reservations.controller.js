@@ -5,7 +5,9 @@ const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 const getReservationDate = (req, res, next) => {
-  const { reservationDate } = req.params;
+  // const methodName = "reservations.getReservationDate";
+  // req.log.debug({ __filename, methodName, query });
+  const reservationDate = req.query.date;
   if (reservationDate) {
     res.locals.reservationDate = reservationDate;
     return next();
