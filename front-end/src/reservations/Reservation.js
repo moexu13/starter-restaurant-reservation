@@ -8,20 +8,32 @@ const Reservation = ({ reservation }) => {
 
   return (
     <div className="reservation">
-      <ul className="reservation__details">
-        <li className="reservation__detail">
-          Name: {name} 
-        </li>
-        <li className="reservation__detail">
-          Phone: {phone}
-        </li>
-        <li className="reservation__detail">
-          Time: {time}
-        </li>
-        <li className="reservation__detail">
-          Number in Party: {people}
-        </li>
-      </ul>
+      <table className="reservation__details">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Time</th>
+            <th>People</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              {name}
+            </td>
+            <td>
+              {phone}
+            </td>
+            <td>
+              {time}
+            </td>
+            <td>
+              {people}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 }

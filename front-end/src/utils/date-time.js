@@ -80,3 +80,22 @@ export function next(currentDate) {
   date.setDate(date.getDate() + 1);
   return asDateString(date);
 }
+
+/**
+ * Formats a Date object as weekday, month, day, year.
+ * @param date
+ *  an instance of a date object
+ * @returns {string}
+ *  the specified Date formatted as weekday, month, day, year
+ */
+export function prettyPrintDate(date) {
+  const dateToPrint = new Date(date);
+  const options = { 
+    weekday: "long", 
+    year: "numeric", 
+    month: "long", 
+    day: "numeric",
+    timeZone: "UTC" 
+  };
+  return dateToPrint.toLocaleDateString("en-US", options);
+}
