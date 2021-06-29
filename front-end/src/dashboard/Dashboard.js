@@ -5,6 +5,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 
 import DatePicker from "../components/DatePicker";
 import ReservationList from "../reservations/ReservationList";
+import { useHistory } from "react-router";
 
 /**
  * Defines the dashboard page.
@@ -13,12 +14,22 @@ import ReservationList from "../reservations/ReservationList";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  const history = useHistory();
+  const { state } = history.location;
+
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [reservationDate, setReservationDate] = useState(date);
-
+  
   useEffect(loadDashboard, [reservationDate]);
-
+  
+  useEffect(() => {
+    if (state && state.resDate) {
+      setReservationDate(state.resDate);
+      history.replace("/dashboard", {});
+    }
+  }, []);
+  
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
@@ -36,7 +47,9 @@ function Dashboard({ date }) {
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for {prettyPrintDate(reservationDate)}</h4>
+        <h4 className="mb-0">Reservations for&nbsp; 
+          {prettyPrintDate(reservationDate)}
+        </h4>
       </div>
       <div>
         <DatePicker date={reservationDate} handleDateChange={handleDateChange} />
