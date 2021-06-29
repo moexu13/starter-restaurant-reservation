@@ -1,17 +1,22 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { createReservation } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 const NewReservation = () => {
 
   const initialFormState = {
-    firstName: "",
-    lastName: "",
-    mobileNumber: "",
-    reservationDate: "",
-    reservationTime: "",
+    first_name: "",
+    last_name: "",
+    mobile_number: "",
+    reservation_date: "",
+    reservation_time: "",
     people: 1
   };
 
   const [formData, setFormData] = useState({ ...initialFormState });
+  const [error, setError] = useState(null);
+  const history = useHistory();
   
   const handleChange = ({ target }) => {
     setFormData({
@@ -22,74 +27,77 @@ const NewReservation = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log("submitted", formData);
-    setFormData({ ...initialFormState });
+    createReservation(formData).then(() => {
+      history.push("/");
+    })
+    .catch(setError);
   }
 
   return (
     <div className="form-container">
       <form onSubmit={handleSubmit} className="form reservation-form">
-        <label className="form-label" htmlFor="firstName">
+        <ErrorAlert error={error} />
+        <label className="form-label" htmlFor="first_name">
           First Name
           <input 
-            id="firstName"
-            name="firstName" 
+            id="first_name"
+            name="first_name" 
             type="text" 
             className="form-field"
             onChange={handleChange}
-            value={formData.firstName}
+            value={formData.first_name}
             required
            />
         </label>
         
-        <label className="form-label" htmlFor="lastName">
+        <label className="form-label" htmlFor="last_name">
           Last Name
           <input
-            id="lastName" 
-            name="lastName" 
+            id="last_name" 
+            name="last_name" 
             type="text" 
             className="form-field"
             onChange={handleChange}
-            value={formData.lastName} 
+            value={formData.last_name} 
             required
           />
         </label>
 
-        <label className="form-label" htmlFor="mobileNumber">
+        <label className="form-label" htmlFor="mobile_number">
           Mobile Number
           <input 
-            id="mobileNumber"
-            name="mobileNumber" 
-            type="text" 
+            id="mobile_number"
+            name="mobile_number" 
+            type="phone" 
             className="form-field"
             onChange={handleChange}
-            value={formData.mobileNumber}
+            value={formData.mobile_number}
             required 
           />
         </label>
 
-        <label className="form-label" htmlFor="reservationDate">
+        <label className="form-label" htmlFor="reservation_date">
           Reservation Date
           <input 
-            id="reservationDate"
-            name="reservationDate" 
-            type="text" 
+            id="reservation_date"
+            name="reservation_date" 
+            type="date" 
             className="form-field"
             onChange={handleChange}
-            value={formData.reservationDate}
+            value={formData.reservation_date}
             required 
           />
         </label>
 
-        <label className="form-label" htmlFor="reservationTime">
+        <label className="form-label" htmlFor="reservation_time">
           Reservation Time
           <input 
-            id="reservationTime"
-            name="reservationTime" 
-            type="text" 
+            id="reservation_time"
+            name="reservation_time" 
+            type="time" 
             className="form-field"
             onChange={handleChange}
-            value={formData.reservationTime}
+            value={formData.reservation_time}
             required 
           />
         </label>
