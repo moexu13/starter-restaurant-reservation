@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { today, previous, next } from "../utils/date-time";
 
 const DatePicker = ({ date, handleDateChange }) => {
   
   const [reservationDate, setReservationDate] = useState(date);
+
+  useEffect(() => {
+    setReservationDate(date);
+  }, [date]);
   
   const handleChange = e => {
     setReservationDate(e.target.value);

@@ -7,6 +7,12 @@ const list = reservationDate => {
     .orderBy("reservation_time");
 }
 
+const read = reservationId => {
+  return knex("reservations")
+    .select("*")
+    .where("reservation_id", reservationId);
+}
+
 const create = newReservation => {
   return knex("reservations").insert(newReservation).returning("*");
 }
@@ -14,4 +20,5 @@ const create = newReservation => {
 module.exports = {
   list,
   create,
+  read,
 }
