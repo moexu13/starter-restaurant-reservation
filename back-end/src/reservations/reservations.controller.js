@@ -16,8 +16,10 @@
  }
 
  const reservationExists = async (req, res, next) => {
+    // const methodName = "reservationExists";
     const { reservationId } = req.params;
     const reservation = await service.read(reservationId); 
+    // req.log.debug({ __filename, methodName, reservation });
     if (reservation) {
       res.locals.reservation = reservation;
       return next();
@@ -82,6 +84,9 @@
  }
 
  const read = (req, res) => {
+  // const methodName = "resread";
+  // const reservation = res.locals.reservation;
+  // req.log.debug({ __filename, methodName, reservation });
   res.json({ data: res.locals.reservation });
  }
  

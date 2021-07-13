@@ -10,7 +10,8 @@ const list = reservationDate => {
 const read = reservationId => {
   return knex("reservations")
     .select("*")
-    .where("reservation_id", reservationId);
+    .where("reservation_id", reservationId)
+    .first();
 }
 
 const create = newReservation => {

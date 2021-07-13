@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Reservation = ({ reservation }) => {
   const name = `${reservation.first_name} ${reservation.last_name}`;
@@ -15,6 +16,7 @@ const Reservation = ({ reservation }) => {
             <th>Phone</th>
             <th>Time</th>
             <th>People</th>
+            <th>&nbsp;</th>
           </tr>
         </thead>
         <tbody>
@@ -30,6 +32,11 @@ const Reservation = ({ reservation }) => {
             </td>
             <td>
               {people}
+            </td>
+            <td>
+              <Link className="link" to={`/reservations/${reservation.reservation_id}/seat`}>
+                Seat
+              </Link>
             </td>
           </tr>
         </tbody>

@@ -15,3 +15,11 @@ export const isRestaurantClosed = (date, time) => {
   const closingTime = new Date(`${date}T21:30:00`).getTime();
   return reservationTime < openingTime || reservationTime > closingTime;
 }
+
+export const doesTableHaveCapacity = (table, reservation) => {
+  return reservation.people < table.capacity;
+}
+
+export const isTableOccupied = table => {
+  return table.reservation_id != null;
+}
