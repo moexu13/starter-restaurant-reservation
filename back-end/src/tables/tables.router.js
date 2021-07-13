@@ -10,6 +10,8 @@
  
  // router.route("/:reservationDate").get(controller.list);
  router.route("/").get(controller.list).all(methodNotAllowed);
+ router.route("/:tableId").get(controller.read).all(methodNotAllowed);
+ router.route("/:tableId/seat").put(controller.seatTable).all(methodNotAllowed);
  
  module.exports = router;
  

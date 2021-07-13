@@ -5,9 +5,7 @@ import Table from "./Table";
 const TableList = ({ tables }) => {
   return (
     tables.map(table => (
-      <Table 
-        table_name={table.table_name}
-        capacity={table.capacity} 
+      <Table table={table}
         key={table.table_id} 
       />)
     )
