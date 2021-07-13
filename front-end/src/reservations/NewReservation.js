@@ -16,9 +16,8 @@ const NewReservation = () => {
   };
 
   const [formData, setFormData] = useState({ ...initialFormState });
-  const [error, setError] = useState(null);
-  const [validationError, setValidationError] = useState([]);
-  const [validationErrorDisplay, setValidationErrorDisplay] = useState(null);
+  const [error, setError] = useState([]);
+  const [errorDisplay, setErrorDisplay] = useState(null);
   const history = useHistory();
   
   const handleChange = ({ target }) => {
@@ -29,16 +28,16 @@ const NewReservation = () => {
   }
 
   useEffect(() => {
-    setValidationErrorDisplay(null);
-    setValidationErrorDisplay(validationError.map((error, index) => (
-      <ErrorAlert error={error} key={index} />
+    setErrorDisplay(null);
+    setErrorDisplay(error.map((err, index) => (
+      <ErrorAlert error={err} key={index} />
     )));
-  }, [validationError]);
+  }, [error]);
 
   // TODO: move validation to run on field change
   const handleSubmit = e => {
     e.preventDefault();
-    setValidationError([]);
+    setError([]);
     const isPast = isPastDate(formData.reservation_date, formData.reservation_time);
     const isTues = isTuesday(formData.reservation_date);
     const isClosed = isRestaurantClosed(formData.reservation_date, formData.reservation_time);
@@ -47,20 +46,21 @@ const NewReservation = () => {
       createReservation(formData).then(() => {
         history.push("/dashboard", { resDate: formData.reservation_date });
       })
-      .catch(setError);
+      .catch(err => setError(existingErrors => (
+        [ ...existingErrors, err ])));
     } else {
       if (isPast) {
-        setValidationError(existingErrors => (
+        setError(existingErrors => (
           [ ...existingErrors,{ message: "Reservation date can't be in the past" }]
         ));
       }
       if (isTues) {
-        setValidationError(existingErrors => (
+        setError(existingErrors => (
           [ ...existingErrors, { message: "Reservation date can't be a Tuesday" }]
         ));
       }
       if (isClosed) {
-        setValidationError(existingErrors => (
+        setError(existingErrors => (
           [ ...existingErrors, { message: "Reservation time must be between 10:30 AM and 9:30 PM"}]
         ));
       }
@@ -75,8 +75,7 @@ const NewReservation = () => {
   return (
     <div className="container form-container">
       <form onSubmit={handleSubmit} className="form reservation-form">
-        <ErrorAlert error={error} />
-        {validationErrorDisplay}
+        {errorDisplay}
         <div className="row">
           <label className="form-label" htmlFor="first_name">
             First Name
