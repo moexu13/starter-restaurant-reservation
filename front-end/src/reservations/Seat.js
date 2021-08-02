@@ -4,6 +4,7 @@ import { useHistory, useParams } from "react-router";
 import { listTables, readReservation, seatTable } from "../utils/api";
 import { doesTableHaveCapacity, isTableOccupied } from "../utils/validation";
 import ErrorAlert from "../layout/ErrorAlert";
+import Reservation from "../reservations/Reservation";
 
 const Seat = () => {
   const [tables, setTables] = useState([]);
@@ -94,6 +95,7 @@ const Seat = () => {
   return (
     <div className="table-seat">
       {errorDisplay}
+      <Reservation reservation={reservation} />
       <form onSubmit={handleSubmit} className="seat-form">
         <label htmlFor="table_id">
           Table

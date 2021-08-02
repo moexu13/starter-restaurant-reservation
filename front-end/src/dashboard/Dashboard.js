@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { listReservations, listTables } from "../utils/api";
+import { listReservations, listTables, finishTable } from "../utils/api";
 import { prettyPrintDate } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 
 import DatePicker from "../components/DatePicker";
 import ReservationList from "../reservations/ReservationList";
-import TablesList from "../tables/TableList";
+import TableList from "../tables/TableList";
 import { useHistory } from "react-router";
 
 /**
@@ -33,6 +33,8 @@ function Dashboard({ date }) {
     }
   }, []);
 
+  // ask if these can be combined into one function that loads
+  // tables on initial page load and whenever a table changes
   useEffect(() => {
     const abortController = new AbortController();
     setTablesError(null);
@@ -40,6 +42,15 @@ function Dashboard({ date }) {
       .then(setTables)
       .catch(setTablesError);
   }, []);
+
+  useEffect(() => {
+    console.log('table updated', tables)
+    // const abortController = new AbortController();
+    // setTablesError(null);
+    // listTables(abortController.signal)
+    //   .then(setTables)
+    //   .catch(setTablesError);
+  }, [tables]);
 
   function loadDashboard() {
     const abortController = new AbortController();
@@ -52,6 +63,15 @@ function Dashboard({ date }) {
 
   const handleDateChange = date => {
     setReservationDate(date);
+  }
+
+  const handleFinishTable = async tableId => {
+    await finishTable(tableId);
+    const abortController = new AbortController();
+    setTablesError(null);
+    listTables(abortController.signal)
+      .then(setTables)
+      .catch(setTablesError);
   }
 
   return (
@@ -70,7 +90,7 @@ function Dashboard({ date }) {
 
       <ReservationList reservations={reservations} />
       <h4 className="tables-list">Tables</h4>
-      <TablesList tables={tables} />
+      <TableList tables={tables} finishTable={handleFinishTable} />
     </main>
   );
 }

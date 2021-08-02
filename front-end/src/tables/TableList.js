@@ -2,11 +2,14 @@ import React from "react";
 
 import Table from "./Table";
 
-const TableList = ({ tables }) => {
+const TableList = ({ tables, finishTable }) => {
+
+  
   return (
     tables.map(table => (
       <Table table={table}
-        key={table.table_id} 
+        key={table.table_id}
+        finishTable={finishTable} 
       />)
     )
   );

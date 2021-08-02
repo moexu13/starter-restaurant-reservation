@@ -17,7 +17,7 @@ export const isRestaurantClosed = (date, time) => {
 }
 
 export const doesTableHaveCapacity = (table, reservation) => {
-  return reservation.people < table.capacity;
+  return reservation.people <= table.capacity;
 }
 
 export const isTableOccupied = table => {

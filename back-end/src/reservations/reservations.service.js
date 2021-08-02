@@ -15,7 +15,9 @@ const read = reservationId => {
 }
 
 const create = newReservation => {
-  return knex("reservations").insert(newReservation).returning("*");
+  return knex("reservations")
+    .insert(newReservation)
+    .returning("*");
 }
 
 module.exports = {

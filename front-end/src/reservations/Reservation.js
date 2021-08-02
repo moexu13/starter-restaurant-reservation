@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Reservation = ({ reservation }) => {
+  if (!reservation) return null;
   const name = `${reservation.first_name} ${reservation.last_name}`;
   const phone = reservation.mobile_number;
   const time = reservation.reservation_time;
