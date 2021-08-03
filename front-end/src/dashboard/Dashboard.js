@@ -18,11 +18,11 @@ function Dashboard({ date }) {
   const history = useHistory();
   const { state } = history.location;
 
+  const [error, setError] = useState([]);
+  const [errorDisplay, setErrorDisplay] = useState(null);
   const [reservations, setReservations] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
   const [reservationDate, setReservationDate] = useState(date);
   const [tables, setTables] = useState([]);
-  const [tablesError, setTablesError] = useState(null);
   
   useEffect(loadDashboard, [reservationDate]);
   
@@ -37,10 +37,10 @@ function Dashboard({ date }) {
   // tables on initial page load and whenever a table changes
   useEffect(() => {
     const abortController = new AbortController();
-    setTablesError(null);
     listTables(abortController.signal)
       .then(setTables)
-      .catch(setTablesError);
+      .catch(err => setError(existingErrors => (
+        [ ...existingErrors, err ])));
   }, []);
 
   useEffect(() => {
@@ -52,12 +52,19 @@ function Dashboard({ date }) {
     //   .catch(setTablesError);
   }, [tables]);
 
+  useEffect(() => {
+    setErrorDisplay(null);
+    setErrorDisplay(error.map((err, index) => (
+      <ErrorAlert error={err} key={index} />
+    )));
+  }, [error]);
+
   function loadDashboard() {
     const abortController = new AbortController();
-    setReservationsError(null);
     listReservations({ date: reservationDate }, abortController.signal)
       .then(setReservations)
-      .catch(setReservationsError);
+      .catch(err => setError(existingErrors => (
+        [ ...existingErrors, err ])));
     return () => abortController.abort();
   }
 
@@ -68,15 +75,16 @@ function Dashboard({ date }) {
   const handleFinishTable = async tableId => {
     await finishTable(tableId);
     const abortController = new AbortController();
-    setTablesError(null);
     listTables(abortController.signal)
       .then(setTables)
-      .catch(setTablesError);
+      .catch(err => setError(existingErrors => (
+        [ ...existingErrors, err ])));
   }
 
   return (
     <main>
       <h1>Dashboard</h1>
+      {errorDisplay}
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for&nbsp; 
           {prettyPrintDate(reservationDate)}
@@ -85,8 +93,6 @@ function Dashboard({ date }) {
       <div>
         <DatePicker date={reservationDate} handleDateChange={handleDateChange} />
       </div>
-      <ErrorAlert error={reservationsError} />
-      <ErrorAlert error={tablesError} />
 
       <ReservationList reservations={reservations} />
       <h4 className="tables-list">Tables</h4>
