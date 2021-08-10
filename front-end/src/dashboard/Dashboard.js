@@ -44,15 +44,6 @@ function Dashboard({ date }) {
   }, []);
 
   useEffect(() => {
-    console.log('table updated', tables)
-    // const abortController = new AbortController();
-    // setTablesError(null);
-    // listTables(abortController.signal)
-    //   .then(setTables)
-    //   .catch(setTablesError);
-  }, [tables]);
-
-  useEffect(() => {
     setErrorDisplay(null);
     setErrorDisplay(error.map((err, index) => (
       <ErrorAlert error={err} key={index} />
@@ -79,17 +70,18 @@ function Dashboard({ date }) {
       .then(setTables)
       .catch(err => setError(existingErrors => (
         [ ...existingErrors, err ])));
+    loadDashboard();
   }
 
   return (
     <main>
       <h1>Dashboard</h1>
-      {errorDisplay}
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for&nbsp; 
           {prettyPrintDate(reservationDate)}
         </h4>
       </div>
+      {errorDisplay}
       <div>
         <DatePicker date={reservationDate} handleDateChange={handleDateChange} />
       </div>

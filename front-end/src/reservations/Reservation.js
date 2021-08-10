@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { capitalizeFirstLetter } from "../utils/utils";
 
 const Reservation = ({ reservation }) => {
   if (!reservation) return null;
@@ -7,7 +8,10 @@ const Reservation = ({ reservation }) => {
   const phone = reservation.mobile_number;
   const time = reservation.reservation_time;
   const people = reservation.people;
+  const status = capitalizeFirstLetter(reservation.status);
 
+  const seatLink =  <Link className="link" to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link>
+  
   return (
     <div className="reservation">
       <table className="reservation__details">
@@ -17,6 +21,7 @@ const Reservation = ({ reservation }) => {
             <th>Phone</th>
             <th>Time</th>
             <th>People</th>
+            <th>Status</th>
             <th>&nbsp;</th>
           </tr>
         </thead>
@@ -34,10 +39,9 @@ const Reservation = ({ reservation }) => {
             <td>
               {people}
             </td>
+              {status}
             <td>
-              <Link className="link" to={`/reservations/${reservation.reservation_id}/seat`}>
-                Seat
-              </Link>
+              {status === "Booked" ? seatLink : ""}
             </td>
           </tr>
         </tbody>
