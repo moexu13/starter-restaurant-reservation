@@ -104,23 +104,34 @@ const create = async (req, res, next) => {
 }
 
 const seatTable = async (req, res, next) => {
-  // const methodName = "seatTable";
-  // const tmp = res.locals.table;
+  const methodName = "seatTable";
+  // const tmp = res.locals.reservation;
   // req.log.debug({ __filename, methodName, tmp}); 
+
+  if (res.locals.reservation.status === "seated") {
+    return next({ status: 400, message: `Reservation ${res.locals.reservation.reservation_id} is already seated` });
+  }
 
   const tableId = res.locals.table.table_id;
   const reservationId = res.locals.reservation.reservation_id;
   const table = await service.seatTable(tableId, reservationId);
+  req.log.debug({ __filename, methodName, table }); 
+  
   res.json({
     data: table,
   });
 }
 
 const finishTable = async (req, res, next) => {
+  const methodName = "finishTable";
+  // const tmp = res.locals.reservation;
+  // req.log.debug({ __filename, methodName, tmp}); 
+  
   if (res.locals.table.reservation_id === null) {
     next({ status: 400, message: `Table ${res.locals.table.table_name} is not occupied`});
   }
-  const updatedTable = await service.finishTable(res.locals.table.table_id);
+  const updatedTable = await service.finishTable(res.locals.table.table_id, res.locals.table.reservation_id);
+  req.log.debug({ __filename, methodName, updatedTable }); 
   res.json({ data: updatedTable });
 }
 

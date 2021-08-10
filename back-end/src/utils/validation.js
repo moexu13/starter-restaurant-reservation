@@ -10,11 +10,11 @@ const isFieldLengthValid = (field, requiredLength) => {
 }
 
 const isInteger = field => {
-  return field && typeof(field) === "number" && parseInt(field);
+  return Number.isInteger(parseInt(field));
 }
 
 const isNumberPositiveInteger = field => {
-  return field && typeof(field) === "number" && field > 0;
+  return Number.isInteger(parseInt(field)) && parseInt(field) > 0;
 }
 
 const isValidDate = date => {
@@ -22,8 +22,12 @@ const isValidDate = date => {
   return isNaN(testDate) === false;
 }
 
-const isValidTime = (time) => {
+const isValidTime = time => {
   return time.match(/^(?:\d{2}):(?:[0-5]\d)(:?:[0-5]\d)?$/)
+}
+
+const isValidStatus = status => {
+  return status === "booked" || status === "seated" || status === "finished";
 }
 
 const isTuesday = date => {
@@ -55,6 +59,7 @@ module.exports = {
   isNumberPositiveInteger,
   isValidDate,
   isValidTime,
+  isValidStatus,
   isTuesday,
   isPastDate,
   isRestaurantOpen,

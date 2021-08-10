@@ -19,18 +19,40 @@ const read = tableId => {
     .first();
 }
 
-const seatTable = (tableId, reservationId) => {
-  return knex("tables")
-    .where("table_id", tableId)
-    .update({ reservation_id: reservationId })
-    .then(updatedTable => updatedTable[0]);
+const seatTable = async (tableId, reservationId) => {
+  try {
+    await knex.transaction(async trx => {
+      return trx("tables")
+        .where("table_id", tableId)
+        .update({ reservation_id: reservationId })
+        .then(() => {
+          return trx("reservations")
+            .where("reservation_id", reservationId)
+            .update({ status: "seated" })
+        })
+        .then(updatedTable => updatedTable[0]);
+    });
+  } catch (error) {
+    return error;
+  }
 }
 
-const finishTable = tableId => {
-  return knex("tables")
-    .where("table_id", tableId)
-    .update({ reservation_id: null })
-    .then(updatedTable => updatedTable[0]);
+const finishTable = async (tableId, reservationId) => {
+  try {
+    await knex.transaction(async trx => {
+      return trx("tables")
+        .where("table_id", tableId)
+        .update({ reservation_id: null })
+        .then(() => {
+          return trx("reservations")
+            .where("reservation_id", reservationId)
+            .update({ status: "finished" })
+        })
+        .then(updatedTable => updatedTable[0]);
+    });
+  } catch (error) {
+    return error;
+  }
 }
 
 module.exports = {

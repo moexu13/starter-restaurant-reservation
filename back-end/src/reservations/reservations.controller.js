@@ -18,11 +18,11 @@
  }
 
  const reservationExists = async (req, res, next) => {
-    // const methodName = "reservationExists";
+    const methodName = "reservationExists";
     const { reservationId } = req.params;
     if (reservationId && validation.isInteger(reservationId)) {
       const reservation = await service.read(reservationId);
-      // req.log.debug({ __filename, methodName, reservation });
+      req.log.debug({ __filename, methodName, reservation });
       if (reservation) {
         res.locals.reservation = reservation;
         return next();
@@ -103,12 +103,29 @@ const validateMobileNumber = (req, res, next) => {
 
  const validatePeople = (req, res, next) => {
    if (!validation.isFieldProvided(res.locals.reservation.people)) {
-     return next({ status: 400, message: "people is required" });
+     return next({ status: 400, message: "Number of people is required" });
    }
    if (!validation.isNumberPositiveInteger(res.locals.reservation.people)) {
-      return next({ status: 400, message: "people must be a number greater than 0" });
+      return next({ status: 400, message: "Number of people must be greater than 0" });
    }
    return next();
+ }
+
+ const validateStatusIsBooked = (req, res, next) => {
+  const status = res.locals.reservation.status; 
+  if (!validation.isFieldProvided(status)) {
+     return next({ status: 400, message: "status is required" });
+  }
+  if (!validation.isValidStatus(status)) {
+    return next({ status: 400, message: "Status must be booked, seated, or finished" });
+  }
+  if (status === "seated") {
+    return next({ status: 400, message: "Reservation is already seated" });
+  }
+  if (status === "finished") {
+    return next({ status: 400, message: "Reservation can't be created with status 'finished" });
+  }
+  return next();
  }
 
  const list = async (req, res) => {
@@ -119,11 +136,18 @@ const validateMobileNumber = (req, res, next) => {
  }
  
  const create = async (req, res) => {
-   const newReservation = await service.create(req.body.data);
- 
-   res.status(201).json({
-     data: newReservation,
-   });
+  // const methodName = "res.create"; 
+  const result = await service.create(req.body.data);
+  // req.log.debug({ __filename, methodName, newReservation, result });
+  const newReservation = (
+    ({ first_name, last_name, mobile_number, reservation_date, reservation_time, people, status }) => 
+    ({ first_name, last_name, mobile_number, reservation_date, reservation_time, people, status })
+  )
+  (result);
+    
+  res.status(201).json({
+    data: newReservation,
+  });
  }
 
  const read = (req, res) => {
@@ -132,10 +156,25 @@ const validateMobileNumber = (req, res, next) => {
   // req.log.debug({ __filename, methodName, reservation });
   res.json({ data: res.locals.reservation });
  }
+
+ const updateStatus = async (req, res, next) => {
+  const status = req.body.data.status;
+  if (validation.isValidStatus(status)) {
+    if (res.locals.reservation.status === "finished") {
+      return next({ status: 400, message: "finished reservations cannot be updated" });
+    }
+    const reservation = await service.updateStatus(res.locals.reservation.reservation_id, status);
+    return res.json({
+      data: reservation,
+    });
+  }
+  return next({ status: 400, message: "Status is unknown - must be booked, seated, or finished" });
+ }
  
  module.exports = {
    list: [getReservationDate, asyncErrorBoundary(list)],
-   create: [hasData, validateFirstName, validateLastName, validateMobileNumber, validateReservationDate, validateReservationTime, validatePeople, asyncErrorBoundary(create)],
+   create: [hasData, validateFirstName, validateLastName, validateMobileNumber, validateReservationDate, validateReservationTime, validatePeople, validateStatusIsBooked, asyncErrorBoundary(create)],
    read: [asyncErrorBoundary(reservationExists), read],
+   updateStatus: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(updateStatus)],
  };
  
