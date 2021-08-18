@@ -9,7 +9,8 @@ const list = () => {
 const create = newTable => {
   return knex("tables")
   .insert(newTable)
-  .returning("*");
+  .returning("*")
+  .then(updatedTable => updatedTable[0]);
 }
 
 const read = tableId => {

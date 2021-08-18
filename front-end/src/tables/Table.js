@@ -1,18 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 const Table = ({ table, finishTable }) => {
 
   const table_status = table.reservation_id == null ? "Free" : "Occupied";
 
-  useEffect(() => {
-    console.log("res id", table.reservation_id);
-  }, [table]);
-
   const handleClick = () => {
     if (window.confirm("Is this table ready to seat new guests? This cannot be undone.")) {
       finishTable(table.table_id);
-      // reset table status
-      // table_status = "Free";
     }
   }
 

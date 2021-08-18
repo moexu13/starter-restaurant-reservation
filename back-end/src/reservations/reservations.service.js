@@ -37,10 +37,20 @@ const finishTable = reservationId => {
     .then(updatedTable => updatedTable[0]);
 }
 
+const searchByMobileNumber = mobile_number => {
+  return knex("reservations")
+    .whereRaw(
+      "translate(mobile_number, '() -', '') like ?",
+      `%${mobile_number.replace(/\D/g, "")}%`
+    )
+    .orderBy("reservation_date");
+}
+
 module.exports = {
   list,
   create,
   read,
   updateStatus,
   finishTable,
+  searchByMobileNumber,
 }

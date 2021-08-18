@@ -10,8 +10,13 @@
    // const methodName = "reservations.getReservationDate";
    // req.log.debug({ __filename, methodName, query });
    const reservationDate = req.query.date;
+   const mobileNumber = req.query.mobile_number;
+
    if (reservationDate && validation.isValidDate(reservationDate)) {
      res.locals.reservationDate = reservationDate;
+     return next();
+   } else if (mobileNumber && validation.isFieldProvided(mobileNumber)) {
+     res.locals.mobileNumber = mobileNumber;
      return next();
    }
    return next({ status: 404, message: "Reservation date required" });
@@ -128,23 +133,25 @@ const validateMobileNumber = (req, res, next) => {
   return next();
  }
 
- const list = async (req, res) => {
-   const reservations = await service.list(res.locals.reservationDate);
-   res.json({
-     data: reservations,
-   });
+ const list = async (req, res, next) => {
+   if (res.locals.reservationDate) {
+    const reservations = await service.list(res.locals.reservationDate);
+    return res.json({
+      data: reservations,
+    });
+   } else if (res.locals.mobileNumber) {
+     const reservations = await service.searchByMobileNumber(res.locals.mobileNumber);
+     return res.json({
+       data: reservations,
+     });
+   }
+   next();
  }
  
  const create = async (req, res) => {
-  // const methodName = "res.create"; 
-  const result = await service.create(req.body.data);
-  // req.log.debug({ __filename, methodName, newReservation, result });
-  const newReservation = (
-    ({ first_name, last_name, mobile_number, reservation_date, reservation_time, people, status }) => 
-    ({ first_name, last_name, mobile_number, reservation_date, reservation_time, people, status })
-  )
-  (result);
-    
+  // const methodName = "rescreate"; 
+  const newReservation = await service.create(req.body.data);
+  // req.log.debug({ __filename, methodName, newReservation });
   res.status(201).json({
     data: newReservation,
   });
