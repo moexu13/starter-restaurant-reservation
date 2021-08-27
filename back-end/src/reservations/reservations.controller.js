@@ -149,12 +149,19 @@ const validateMobileNumber = (req, res, next) => {
  }
  
  const create = async (req, res) => {
-  // const methodName = "rescreate"; 
-  const newReservation = await service.create(req.body.data);
-  // req.log.debug({ __filename, methodName, newReservation });
-  res.status(201).json({
-    data: newReservation,
-  });
+  // const methodName = "rescreate";
+  if (req.body.data.reservation_id) {
+    const updatedReservation = await service.update(req.body.data);
+    res.status(201).json({
+      data: updatedReservation,
+    });
+  } else {
+    const newReservation = await service.create(req.body.data);
+    // req.log.debug({ __filename, methodName, newReservation });
+    res.status(201).json({
+      data: newReservation,
+    });
+  }
  }
 
  const read = (req, res) => {
@@ -175,7 +182,7 @@ const validateMobileNumber = (req, res, next) => {
       data: reservation,
     });
   }
-  return next({ status: 400, message: "Status is unknown - must be booked, seated, or finished" });
+  return next({ status: 400, message: "Status is unknown - must be booked, seated, finished, or cancelled" });
  }
  
  module.exports = {

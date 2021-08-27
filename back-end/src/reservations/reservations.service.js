@@ -22,6 +22,14 @@ const create = newReservation => {
     .then(updatedTable => updatedTable[0]);
 }
 
+const update = updatedReservation => {
+  return knex("reservations")
+    .where("reservation_id", updatedReservation.reservation_id)
+    .update(updatedReservation)
+    .returning("*")
+    .then(updatedReservation => updatedReservation[0]);
+}
+
 const updateStatus = (reservationId, status) => {
   return knex("reservations")
     .where("reservation_id", reservationId)
@@ -50,6 +58,7 @@ module.exports = {
   list,
   create,
   read,
+  update,
   updateStatus,
   finishTable,
   searchByMobileNumber,

@@ -27,7 +27,8 @@ const isValidTime = time => {
 }
 
 const isValidStatus = status => {
-  return status === "booked" || status === "seated" || status === "finished";
+  const validStatuses =  ["booked", "seated", "finished", "cancelled"];
+  return validStatuses.includes(status);
 }
 
 const isTuesday = date => {

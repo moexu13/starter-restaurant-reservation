@@ -6,7 +6,7 @@ const ReservationList = ({ reservations }) => {
     reservations.map(reservation => (
       <Reservation 
         reservation={reservation} 
-        key={reservation.reservation_id} 
+        key={reservation.reservation_id}
       />)
     )
   );

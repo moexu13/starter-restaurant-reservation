@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api";
+import { useHistory, useParams } from "react-router-dom";
+import { createReservation, readReservation } from "../utils/api";
 import { isPastDate, isTuesday, isRestaurantClosed } from "../utils/validation";
 import ErrorAlert from "../layout/ErrorAlert";
 
-const NewReservation = () => {
+const EditReservation = () => {
 
+  const { reservationId } = useParams();
   const initialFormState = {
     first_name: "",
     last_name: "",
     mobile_number: "",
     reservation_date: "",
     reservation_time: "",
-    people: 1
+    people: 1,
+    status: "booked"
   };
 
   const [formData, setFormData] = useState({ ...initialFormState });
   const [error, setError] = useState([]);
   const [errorDisplay, setErrorDisplay] = useState(null);
+  const [buttonText, setButtonText] = useState("Add Reservation");
   const history = useHistory();
   
   const handleChange = ({ target }) => {
@@ -26,6 +29,14 @@ const NewReservation = () => {
       [target.name]: target.value
     });
   }
+
+  useEffect(async () => {
+    if (reservationId) {
+      const reservation = await readReservation(reservationId);
+      setFormData(reservation);
+      setButtonText("Save");
+    }
+  }, []);
 
   useEffect(() => {
     setErrorDisplay(null);
@@ -167,7 +178,7 @@ const NewReservation = () => {
         </div>
         
         <div className="row">
-          <button type="submit" className="btn btn-primary">Add Reservation</button>
+          <button type="submit" className="btn btn-primary">{buttonText}</button>
           <button type="cancel" className="btn btn-secondary" onClick={handleCancel}>
             Cancel
           </button>
@@ -177,4 +188,4 @@ const NewReservation = () => {
   );
 }
 
-export default NewReservation;
+export default EditReservation;
