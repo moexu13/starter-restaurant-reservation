@@ -87,7 +87,6 @@ function Dashboard({ date }) {
       </div>
 
       <ReservationList reservations={reservations} />
-      <h4 className="tables-list">Tables</h4>
       <TableList tables={tables} finishTable={handleFinishTable} />
     </main>
   );

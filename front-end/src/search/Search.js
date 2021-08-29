@@ -24,10 +24,10 @@ const Search = () => {
   }
 
   return (
-    <div className="container">
+    <div className="container mt-3">
       <div className="row">
         <div className="col">
-          <p>Enter a customer's phone number</p>
+          <p className="fw-bold">Enter a customer's phone number</p>
           <form onSubmit={handleSubmit}>
             <input name="mobile_number" type="phone" value={mobileNumber} onChange={handleChange} />
             <button type="submit" className="btn btn-primary btn-sm">Find</button>

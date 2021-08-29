@@ -27,36 +27,29 @@ const Reservation = ({ reservation  }) => {
   return (
     <div className="reservation">
       <ErrorAlert error={error} />
-      <ul className="reservation__details--header list-group list-group-horizontal">  
-        <li className="list-group-item">Name</li>
-        <li className="list-group-item">Phone</li>
-        <li className="list-group-item">Time</li>
-        <li className="list-group-item">People</li>
-        <li className="list-group-item">Status</li>
-      </ul>
-      <ul className="reservation__details list-group list-group-horizontal">
-        <li className="list-group-item">
+      <div className="reservation__details row justify-content-start mb-3">
+        <div className="col-3">
           {name}
-        </li>
-        <li className="list-group-item">
+        </div>
+        <div className="col-2">
           {phone}
-        </li>
-        <li className="list-group-item">
+        </div>
+        <div className="col-1">
           {time}
-        </li>
-        <li className="list-group-item">
+        </div>
+        <div className="col-1">
           {people}
-        </li>
-        <li className="list-group-item">
+        </div>
+        <div className="col-1">
           {status}
-        </li>
-        <li className="list-group-item">
+        </div>
+        <div className="col-1">
           {status === "Booked" ? seatLink : ""}
-        </li>
-        <li className="list-group-item">
+        </div>
+        <div className="col-1">
           {status === "Booked" ? editLink : ""}
-        </li>
-        <li className="list-group-item">
+        </div>
+        <div className="col-1">
           <button 
             className="btn btn-secondary" 
             data-reservation-id-cancel={reservation.reservation_id}
@@ -64,8 +57,8 @@ const Reservation = ({ reservation  }) => {
           >
             Cancel
           </button>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   );
 }

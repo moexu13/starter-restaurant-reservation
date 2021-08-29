@@ -30,12 +30,15 @@ const EditReservation = () => {
     });
   }
 
-  useEffect(async () => {
-    if (reservationId) {
-      const reservation = await readReservation(reservationId);
-      setFormData(reservation);
-      setButtonText("Save");
+  useEffect(() => {
+    const fetchData = async () => {
+      if (reservationId) {
+        const reservation = await readReservation(reservationId);
+        setFormData(reservation);
+        setButtonText("Save");
+      }
     }
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -85,103 +88,117 @@ const EditReservation = () => {
 
   return (
     <div className="container form-container">
-      <form onSubmit={handleSubmit} className="form reservation-form">
+      <form onSubmit={handleSubmit} className="form reservation-form m-3">
         {errorDisplay}
         <div className="row">
-          <label className="form-label" htmlFor="first_name">
-            First Name
-            <input 
-              id="first_name"
-              name="first_name" 
-              type="text" 
-              className="form-field"
-              onChange={handleChange}
-              value={formData.first_name}
-              required
-            />
-          </label>
+          <div className="col-xl mb-1">
+            <label className="form-label" htmlFor="first_name">
+              First Name
+              <input 
+                id="first_name"
+                name="first_name" 
+                type="text" 
+                className="form-control"
+                onChange={handleChange}
+                value={formData.first_name}
+                required
+              />
+            </label>
+          </div>
         </div>
         
         <div className="row">
-          <label className="form-label" htmlFor="last_name">
-            Last Name
-            <input
-              id="last_name" 
-              name="last_name" 
-              type="text" 
-              className="form-field"
-              onChange={handleChange}
-              value={formData.last_name} 
-              required
-            />
-          </label>
+          <div className="col-xl mb-1">
+            <label className="form-label" htmlFor="last_name">
+              Last Name
+              <input
+                id="last_name" 
+                name="last_name" 
+                type="text" 
+                className="form-control"
+                onChange={handleChange}
+                value={formData.last_name} 
+                required
+              />
+            </label>
+          </div>
         </div>
 
         <div className="row">
-          <label className="form-label" htmlFor="mobile_number">
-            Mobile Number
-            <input 
-              id="mobile_number"
-              name="mobile_number" 
-              type="phone" 
-              className="form-field"
-              onChange={handleChange}
-              value={formData.mobile_number}
-              required 
-            />
-          </label>
+          <div className="col-xl mb-1">
+            <label className="form-label" htmlFor="mobile_number">
+              Mobile Number
+              <input 
+                id="mobile_number"
+                name="mobile_number" 
+                type="phone" 
+                className="form-control"
+                onChange={handleChange}
+                value={formData.mobile_number}
+                required 
+              />
+            </label>
+          </div>
         </div>
 
         <div className="row">
-          <label className="form-label" htmlFor="reservation_date">
-            Reservation Date
-            <input 
-              id="reservation_date"
-              name="reservation_date" 
-              type="date" 
-              className="form-field"
-              onChange={handleChange}
-              value={formData.reservation_date}
-              required 
-            />
-          </label>
+            <div className="col-xl mb-1">
+            <label className="form-label" htmlFor="reservation_date">
+              Reservation Date
+              <input 
+                id="reservation_date"
+                name="reservation_date" 
+                type="date" 
+                className="form-control"
+                onChange={handleChange}
+                value={formData.reservation_date}
+                required 
+              />
+            </label>
+          </div>
         </div>
 
         <div className="row">
-          <label className="form-label" htmlFor="reservation_time">
-            Reservation Time
-            <input 
-              id="reservation_time"
-              name="reservation_time" 
-              type="time" 
-              className="form-field"
-              onChange={handleChange}
-              value={formData.reservation_time}
-              required 
-            />
-          </label>
+          <div className="col-xl mb-1">
+            <label className="form-label" htmlFor="reservation_time">
+              Reservation Time
+              <input 
+                id="reservation_time"
+                name="reservation_time" 
+                type="time" 
+                className="form-control"
+                onChange={handleChange}
+                value={formData.reservation_time}
+                required 
+              />
+            </label>
+          </div>
         </div>
 
         <div className="row">
-          <label className="form-label" htmlFor="people">
-            Number of People
-            <input 
-              id="people"
-              name="people" 
-              type="text" 
-              className="form-field"
-              onChange={handleChange}
-              value={formData.people}
-              required 
-            />
-          </label>
+          <div className="col-xl mb-1">
+            <label className="form-label" htmlFor="people">
+              Number of People
+              <input 
+                id="people"
+                name="people" 
+                type="text" 
+                className="form-control"
+                onChange={handleChange}
+                value={formData.people}
+                required 
+              />
+            </label>
+          </div>
         </div>
         
         <div className="row">
-          <button type="submit" className="btn btn-primary">{buttonText}</button>
-          <button type="cancel" className="btn btn-secondary" onClick={handleCancel}>
-            Cancel
-          </button>
+          <div className="col-xl mt-2">
+            <button type="submit" className="btn btn-primary">{buttonText}</button>
+            <button type="cancel" className="btn btn-secondary ml-1" onClick={handleCancel}>
+              Cancel
+            </button>
+          </div>
         </div>
       </form>
     </div>

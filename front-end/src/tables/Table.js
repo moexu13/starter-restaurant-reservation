@@ -27,11 +27,15 @@ const Table = ({ table, finishTable }) => {
   
   return (
     <div className="table">
-      <p>
-        {table.table_name} - {table.capacity} &nbsp;
-        <span data-table-id-status={table.table_id}>{table_status}&nbsp;</span>
-        {buttonText()}
-      </p>
+      <div className="row">
+        <div className="col-3 ml-3">
+          {table.table_name} - {table.capacity}
+        </div>
+        <div className="col-2">
+          <span data-table-id-status={table.table_id}>{table_status}&nbsp;</span>
+          {buttonText()}
+        </div>
+      </div>
     </div>
   );
 }

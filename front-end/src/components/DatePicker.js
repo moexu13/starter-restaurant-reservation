@@ -34,9 +34,9 @@ const DatePicker = ({ date, handleDateChange }) => {
   }
 
   return (
-    <div className="container date-picker">
+    <div className="date-picker">
       <div className="row">
-        <div className="col">
+        <div className="col justify-content-center">
           <form onSubmit={handleSubmit}>
             <input name="date" type="date" value={reservationDate} onChange={handleChange} />
             <button type="submit" className="btn btn-primary btn-sm">Go</button>
@@ -44,16 +44,18 @@ const DatePicker = ({ date, handleDateChange }) => {
         </div>
       </div>
       <div className="row">
-        <div className="btn-group m-2" role="group">
-          <button type="button" className="btn btn-secondary" onClick={handlePreviousDay}>
-            &larr;
-          </button>
-          <button type="button" className="btn btn-secondary" onClick={handleToday}>
-            Today
-          </button>
-          <button type="button" className="btn btn-secondary" onClick={handleNextDay}>
-            &rarr;
-          </button>
+        <div className="col justify-content-center">
+          <div className="btn-group m-2" role="group">
+            <button type="button" className="btn btn-secondary" onClick={handlePreviousDay}>
+              &larr;
+            </button>
+            <button type="button" className="btn btn-secondary" onClick={handleToday}>
+              Today
+            </button>
+            <button type="button" className="btn btn-secondary" onClick={handleNextDay}>
+              &rarr;
+            </button>
+          </div>
         </div>
       </div>
     </div>

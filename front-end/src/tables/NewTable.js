@@ -35,7 +35,7 @@ const NewTable = () => {
   }
   
   return (
-    <div className="container form-container">
+    <div className="container form-container m-3">
       <form onSubmit={handleSubmit} className="form table-form">
       <ErrorAlert error={error} />
         <div className="row">
@@ -45,7 +45,7 @@ const NewTable = () => {
               id="table_name"
               name="table_name" 
               type="text" 
-              className="form-field"
+              className="form-control"
               onChange={handleChange}
               value={formData.table_name}
               required
@@ -60,7 +60,7 @@ const NewTable = () => {
               id="capacity"
               name="capacity" 
               type="text" 
-              className="form-field"
+              className="form-control"
               onChange={handleChange}
               value={formData.capacity}
               required 
@@ -68,9 +68,9 @@ const NewTable = () => {
           </label>
         </div>
 
-        <div className="row">
+        <div className="row mt-2">
           <button type="submit" className="btn btn-primary">Add Table</button>
-          <button type="cancel" className="btn btn-secondary" onClick={handleCancel}>
+          <button type="cancel" className="btn btn-secondary ml-2" onClick={handleCancel}>
             Cancel
           </button>
         </div>
