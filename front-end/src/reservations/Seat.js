@@ -92,12 +92,12 @@ const Seat = () => {
   }
   
   return (
-    <div className="table-seat">
+    <div className="table-seat ml-3 mt-3">
       {errorDisplay}
       <Reservation reservation={reservation} />
       <form onSubmit={handleSubmit} className="seat-form">
         <label htmlFor="table_id">
-          Table
+          Table:&nbsp;
         </label>
         <select name="table_id" onChange={handleChange}>
           <option key="default" value="default">Select a Table</option>

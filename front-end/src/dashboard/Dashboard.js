@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations, listTables } from "../utils/api";
+import { finishTable, listReservations, listTables } from "../utils/api";
 import { prettyPrintDate } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 
@@ -41,7 +41,7 @@ function Dashboard({ date }) {
       .then(setTables)
       .catch(err => setError(existingErrors => (
         [ ...existingErrors, err ])));
-  }, [tables]);
+  }, []);
 
   useEffect(() => {
     setErrorDisplay(null);
@@ -63,6 +63,16 @@ function Dashboard({ date }) {
     setReservationDate(date);
   }
 
+  const handleFinishTable = async tableId => {
+    await finishTable(tableId);
+    const abortController = new AbortController();
+    listTables(abortController.signal)
+      .then(setTables)
+      .catch(err => setError(existingErrors => (
+        [ ...existingErrors, err ])));
+    loadDashboard();
+  }
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -77,7 +87,7 @@ function Dashboard({ date }) {
       </div>
 
       <ReservationList reservations={reservations} />
-      <TableList tables={tables} />
+      <TableList tables={tables} finishTable={handleFinishTable} />
     </main>
   );
 }

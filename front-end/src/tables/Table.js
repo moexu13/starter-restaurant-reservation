@@ -1,18 +1,13 @@
 import React from "react";
-import { finishTable } from "../utils/api";
 
-const Table = ({ table }) => {
+const Table = ({ table, finishTable }) => {
 
   const table_status = table.reservation_id == null ? "Free" : "Occupied";
 
   const handleClick = () => {
     if (window.confirm("Is this table ready to seat new guests? This cannot be undone.")) {
-      handleFinishTable(table.table_id);
+      finishTable(table.table_id);
     }
-  }
-
-  const handleFinishTable = async tableId => {
-    await finishTable(tableId);
   }
 
   const buttonText = () => {
