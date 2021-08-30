@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations, listTables, finishTable } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import { prettyPrintDate } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 
@@ -16,8 +16,6 @@ import { useHistory } from "react-router";
  */
 function Dashboard({ date }) {
   const history = useHistory();
-  const { state } = history.location;
-
   const [error, setError] = useState([]);
   const [errorDisplay, setErrorDisplay] = useState(null);
   const [reservations, setReservations] = useState([]);
@@ -25,13 +23,15 @@ function Dashboard({ date }) {
   const [tables, setTables] = useState([]);
   
   useEffect(loadDashboard, [reservationDate]);
+
   
   useEffect(() => {
+    const { state } = history.location;
     if (state && state.resDate) {
       setReservationDate(state.resDate);
       history.replace("/dashboard", {});
     }
-  }, []);
+  }, [history]);
 
   // ask if these can be combined into one function that loads
   // tables on initial page load and whenever a table changes
@@ -41,7 +41,7 @@ function Dashboard({ date }) {
       .then(setTables)
       .catch(err => setError(existingErrors => (
         [ ...existingErrors, err ])));
-  }, []);
+  }, [tables]);
 
   useEffect(() => {
     setErrorDisplay(null);
@@ -63,16 +63,6 @@ function Dashboard({ date }) {
     setReservationDate(date);
   }
 
-  const handleFinishTable = async tableId => {
-    await finishTable(tableId);
-    const abortController = new AbortController();
-    listTables(abortController.signal)
-      .then(setTables)
-      .catch(err => setError(existingErrors => (
-        [ ...existingErrors, err ])));
-    loadDashboard();
-  }
-
   return (
     <main>
       <h1>Dashboard</h1>
@@ -87,7 +77,7 @@ function Dashboard({ date }) {
       </div>
 
       <ReservationList reservations={reservations} />
-      <TableList tables={tables} finishTable={handleFinishTable} />
+      <TableList tables={tables} />
     </main>
   );
 }

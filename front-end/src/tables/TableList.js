@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 
 import Table from "./Table";
 
-const TableList = ({ tables, finishTable }) => {
+const TableList = ({ tables }) => {
   const [tableMap, setTableMap] = useState("");
 
   useEffect(() => {
     setTableMap(tables.map(table => (
       <Table table={table}
-        key={table.table_id}
-        finishTable={finishTable} 
+        key={table.table_id} 
       />)
     ));
   }, [tables]);

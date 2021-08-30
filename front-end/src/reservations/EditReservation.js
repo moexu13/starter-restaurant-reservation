@@ -7,6 +7,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 const EditReservation = () => {
 
   const { reservationId } = useParams();
+
   const initialFormState = {
     first_name: "",
     last_name: "",
@@ -39,7 +40,7 @@ const EditReservation = () => {
       }
     }
     fetchData();
-  }, []);
+  }, [reservationId]);
 
   useEffect(() => {
     setErrorDisplay(null);

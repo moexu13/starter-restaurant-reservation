@@ -25,7 +25,6 @@ const Seat = () => {
     return () => abortController.abort();
   }, []);
 
-  // TODO: fix this so it properly displays a reservation
   useEffect(() => {
     const abortController = new AbortController();
     readReservation(reservationId, abortController.signal)
@@ -33,7 +32,7 @@ const Seat = () => {
       .catch(err => setError(existingErrors => (
         [ ...existingErrors, err ])));
     return () => abortController.abort();
-  }, []);
+  }, [reservationId]);
 
   useEffect(() => {
     setTableSelect(tables.map(table => (
