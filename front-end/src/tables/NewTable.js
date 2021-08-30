@@ -59,7 +59,7 @@ const NewTable = () => {
             <input 
               id="capacity"
               name="capacity" 
-              type="text" 
+              type="number" 
               className="form-control"
               onChange={handleChange}
               value={formData.capacity}

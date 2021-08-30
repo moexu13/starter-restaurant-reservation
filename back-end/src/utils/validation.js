@@ -9,6 +9,10 @@ const isFieldLengthValid = (field, requiredLength) => {
   return field && field.length >= requiredLength;
 }
 
+const isFieldNumber = field => {
+  return typeof(field) === "number";
+}
+
 const isInteger = field => {
   return Number.isInteger(parseInt(field));
 }
@@ -56,6 +60,7 @@ const isRestaurantOpen = (date, time) => {
 module.exports = {
   isFieldProvided,
   isFieldLengthValid,
+  isFieldNumber,
   isInteger,
   isNumberPositiveInteger,
   isValidDate,

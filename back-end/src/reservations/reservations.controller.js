@@ -110,6 +110,9 @@ const validateMobileNumber = (req, res, next) => {
    if (!validation.isFieldProvided(res.locals.reservation.people)) {
      return next({ status: 400, message: "Number of people is required" });
    }
+   if (!validation.isFieldNumber(res.locals.reservation.people)) {
+     return next({ status: 400, message: "people must be a number" });
+   }
    if (!validation.isNumberPositiveInteger(res.locals.reservation.people)) {
       return next({ status: 400, message: "Number of people must be greater than 0" });
    }
@@ -140,10 +143,12 @@ const validateMobileNumber = (req, res, next) => {
       data: reservations,
     });
    } else if (res.locals.mobileNumber) {
-     const reservations = await service.searchByMobileNumber(res.locals.mobileNumber);
+    const reservations = await service.searchByMobileNumber(res.locals.mobileNumber);
      return res.json({
        data: reservations,
      });
+   } else {
+     return next({ status: 404, message: "Page not found" });
    }
    next();
  }

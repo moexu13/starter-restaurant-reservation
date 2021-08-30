@@ -183,7 +183,7 @@ const EditReservation = () => {
               <input 
                 id="people"
                 name="people" 
-                type="text" 
+                type="number" 
                 className="form-control"
                 onChange={handleChange}
                 value={formData.people}
