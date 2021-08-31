@@ -58,6 +58,7 @@ const EditReservation = () => {
     const isClosed = isRestaurantClosed(formData.reservation_date, formData.reservation_time);
 
     if (!isPast && !isTues && !isClosed) {
+      formData.people = parseInt(formData.people);
       createReservation(formData).then(() => {
         history.push("/dashboard", { resDate: formData.reservation_date });
       })
