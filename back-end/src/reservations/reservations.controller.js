@@ -120,7 +120,9 @@ const validateMobileNumber = (req, res, next) => {
  }
 
  const validateStatusIsBooked = (req, res, next) => {
-  const status = res.locals.reservation.status; 
+  const status = res.locals.reservation.status;
+  if (!status) return next();
+
   if (!validation.isFieldProvided(status)) {
      return next({ status: 400, message: "status is required" });
   }
@@ -176,6 +178,13 @@ const validateMobileNumber = (req, res, next) => {
   res.json({ data: res.locals.reservation });
  }
 
+ const update = async (req, res, next) => {
+   const updatedReservation = await service.update(res.locals.reservation);
+   res.json({ 
+     data: updatedReservation 
+   });
+ }
+
  const updateStatus = async (req, res, next) => {
   const status = req.body.data.status;
   if (validation.isValidStatus(status)) {
@@ -194,6 +203,7 @@ const validateMobileNumber = (req, res, next) => {
    list: [getReservationDate, asyncErrorBoundary(list)],
    create: [hasData, validateFirstName, validateLastName, validateMobileNumber, validateReservationDate, validateReservationTime, validatePeople, validateStatusIsBooked, asyncErrorBoundary(create)],
    read: [asyncErrorBoundary(reservationExists), read],
+   update: [reservationExists, hasData, validateFirstName, validateLastName, validateMobileNumber, validateReservationDate, validateReservationTime, validatePeople, asyncErrorBoundary(update)],
    updateStatus: [asyncErrorBoundary(reservationExists), asyncErrorBoundary(updateStatus)],
  };
  
