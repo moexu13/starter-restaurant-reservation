@@ -2,18 +2,18 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { updateStatus } from "../utils/api";
-import { capitalizeFirstLetter } from "../utils/utils";
 
 const Reservation = ({ reservation  }) => {
   const [error, setError] = useState(null)
   if (!reservation) return null;
+
   const name = `${reservation.first_name} ${reservation.last_name}`;
   const phone = reservation.mobile_number;
   const time = reservation.reservation_time;
   const people = reservation.people;
-  const status = capitalizeFirstLetter(reservation.status);
+  const status = reservation.status;
 
-  const seatLink = <Link className="link" to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link>;
+  const seatLink = <Link to={`/reservations/${reservation.reservation_id}/seat`}>Seat</Link>;
 
   const editLink = <Link className="link" to={`/reservations/${reservation.reservation_id}/edit`}>Edit</Link>;
 
@@ -21,6 +21,7 @@ const Reservation = ({ reservation  }) => {
     if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")) {
       await updateStatus(reservation.reservation_id, "cancelled")
         .catch(err => setError(err));
+      window.location.reload();
     }
   }
   
@@ -41,13 +42,13 @@ const Reservation = ({ reservation  }) => {
           {people}
         </div>
         <div className="col-1">
-          {status}
+          <span data-reservation-id-status={reservation.reservation_id}>{status}</span>
         </div>
         <div className="col-1">
-          {status === "Booked" ? seatLink : ""}
+          {status === "booked" ? seatLink : ""}
         </div>
         <div className="col-1">
-          {status === "Booked" ? editLink : ""}
+          {status === "booked" ? editLink : ""}
         </div>
         <div className="col-1">
           <button 

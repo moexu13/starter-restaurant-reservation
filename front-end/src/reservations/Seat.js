@@ -7,11 +7,11 @@ import ErrorAlert from "../layout/ErrorAlert";
 import Reservation from "../reservations/Reservation";
 
 const Seat = () => {
+  // const [formData, setFormData] = useState("Please choose a table");
   const [tables, setTables] = useState([]);
   const [tableId, setTableId] = useState(null);
   const [error, setError] = useState([]);
   const [errorDisplay, setErrorDisplay] = useState(null);
-  const [tableSelect, setTableSelect] = useState(null);
   const [reservation, setReservation] = useState(null);
   const history = useHistory();
   const { reservationId } = useParams();
@@ -35,14 +35,6 @@ const Seat = () => {
   }, [reservationId]);
 
   useEffect(() => {
-    setTableSelect(tables.map(table => (
-      <option key={table.table_id} value={table.table_id}>
-        {table.table_name} - {table.capacity}
-      </option>)
-    ))
-  }, [tables]);
-
-  useEffect(() => {
     setErrorDisplay(null);
     setErrorDisplay(error.map((err, index) => (
       <ErrorAlert error={err} key={index} />
@@ -58,7 +50,7 @@ const Seat = () => {
     history.push("/");
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setError([]);
     const isTableIdSet = tableId && tableId !== "default";
@@ -67,11 +59,15 @@ const Seat = () => {
     const hasCapacity = doesTableHaveCapacity(table, reservation);
 
     if (isTableIdSet && !isOccupied && hasCapacity) {
-      seatTable(tableId, reservationId).then(() => {
-        history.push("/dashboard");
-      })
-      .catch(err => setError(existingErrors => (
-        [ ...existingErrors, err ])));
+      try {
+        await seatTable(tableId, reservationId).then(() => {
+          history.push("/dashboard");
+        })
+        .catch(err => setError(existingErrors => (
+          [ ...existingErrors, err ])));
+      } catch (err) {
+        setError(err);
+      }
     } else {
       if (!isTableIdSet) {
         setError(existingErrors => (
@@ -96,12 +92,18 @@ const Seat = () => {
       {errorDisplay}
       <Reservation reservation={reservation} />
       <form onSubmit={handleSubmit} className="seat-form">
-        <label htmlFor="table_id">
-          Table:&nbsp;
+        <label htmlFor="table_id" className="mr-1">
+          Table:
         </label>
-        <select name="table_id" onChange={handleChange}>
+        <select id="table_id" name="table_id" onChange={handleChange}>
           <option key="default" value="default">Select a Table</option>
-          {tableSelect}
+          {tables.map(table => {
+            return (
+              <option key={table.table_id} value={table.table_id}>
+                {table.table_name} - {table.capacity}
+              </option>
+            );
+          })}
         </select>
         <button type="submit" className="btn btn-primary btn-sm">Seat Reservation</button>
         <button type="cancel" className="btn btn-secondary btn-sm" onClick={handleCancel}>

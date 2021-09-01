@@ -7,7 +7,7 @@ import ErrorAlert from "../layout/ErrorAlert";
 const NewTable = () => {
   const initialFormData = {
     table_name: "",
-    capacity: 1
+    capacity: ""
   }
   
   const [error, setError] = useState(null);
@@ -31,7 +31,7 @@ const NewTable = () => {
 
   const handleCancel = e => {
     e.preventDefault();
-    history.push("/");
+    history.goBack();
   }
   
   return (

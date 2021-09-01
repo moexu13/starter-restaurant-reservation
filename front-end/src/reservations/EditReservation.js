@@ -21,7 +21,6 @@ const EditReservation = () => {
   const [formData, setFormData] = useState({ ...initialFormState });
   const [error, setError] = useState([]);
   const [errorDisplay, setErrorDisplay] = useState(null);
-  const [buttonText, setButtonText] = useState("Add Reservation");
   const history = useHistory();
   
   const handleChange = ({ target }) => {
@@ -36,7 +35,6 @@ const EditReservation = () => {
       if (reservationId) {
         const reservation = await readReservation(reservationId);
         setFormData(reservation);
-        setButtonText("Save");
       }
     }
     fetchData();
@@ -196,7 +194,7 @@ const EditReservation = () => {
         
         <div className="row">
           <div className="col-xl mt-2">
-            <button type="submit" className="btn btn-primary">{buttonText}</button>
+            <button type="submit" className="btn btn-primary">Submit</button>
             <button type="cancel" className="btn btn-secondary ml-1" onClick={handleCancel}>
               Cancel
             </button>

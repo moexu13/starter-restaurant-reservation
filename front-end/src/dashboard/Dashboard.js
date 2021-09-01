@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { finishTable, listReservations, listTables } from "../utils/api";
-import { prettyPrintDate } from "../utils/date-time";
+import { prettyPrintDate, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 
 import DatePicker from "../components/DatePicker";
 import ReservationList from "../reservations/ReservationList";
 import TableList from "../tables/TableList";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 
 /**
  * Defines the dashboard page.
@@ -15,11 +15,15 @@ import { useHistory } from "react-router";
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
+  const query = useQuery();
   const history = useHistory();
   const [error, setError] = useState([]);
   const [errorDisplay, setErrorDisplay] = useState(null);
   const [reservations, setReservations] = useState([]);
-  const [reservationDate, setReservationDate] = useState(date);
+  const [reservationDate, setReservationDate] = useState(query.get("date") || today());
   const [tables, setTables] = useState([]);
   
   useEffect(loadDashboard, [reservationDate]);

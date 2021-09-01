@@ -2,7 +2,7 @@ import React from "react";
 
 const Table = ({ table, finishTable }) => {
 
-  const table_status = table.reservation_id == null ? "Free" : "Occupied";
+  const table_status = table.reservation_id == null ? "free" : "occupied";
 
   const handleClick = () => {
     if (window.confirm("Is this table ready to seat new guests? This cannot be undone.")) {
@@ -11,10 +11,10 @@ const Table = ({ table, finishTable }) => {
   }
 
   const buttonText = () => {
-    if (table_status === "Occupied") {
+    if (table_status === "occupied") {
       return (
         <button onClick={handleClick} 
-          className="btn btn-secondary btn-sm" 
+          className="btn btn-secondary btn-sm ml-2" 
           data-table-id-finish={table.table_id}
         >
           Finish
@@ -32,7 +32,7 @@ const Table = ({ table, finishTable }) => {
           {table.table_name} - {table.capacity}
         </div>
         <div className="col-2">
-          <span data-table-id-status={table.table_id}>{table_status}&nbsp;</span>
+          <span data-table-id-status={table.table_id}>{table_status}</span>
           {buttonText()}
         </div>
       </div>

@@ -121,7 +121,10 @@ const validateMobileNumber = (req, res, next) => {
 
  const validateStatusIsBooked = (req, res, next) => {
   const status = res.locals.reservation.status;
-  if (!status) return next();
+  if (!status) {
+    res.locals.reservation.status = "booked";
+    return next();
+  }
 
   if (!validation.isFieldProvided(status)) {
      return next({ status: 400, message: "status is required" });
